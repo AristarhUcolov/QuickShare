@@ -10,7 +10,8 @@ from io import BytesIO
 import base64
 from translations import get_translation
 
-UPLOAD_FOLDER = "uploads"
+# Использовать переменную окружения если установлена, иначе "uploads"
+UPLOAD_FOLDER = os.environ.get('UPLOAD_FOLDER', 'uploads')
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 app = Flask(__name__)

@@ -29,19 +29,22 @@ print("\n" + "="*70)
 print("📦 Building GUI Version...")
 print("="*70)
 
+separator = ';' if os.name == 'nt' else ':'
 PyInstaller.__main__.run([
     str(current_dir / 'launcher.py'),
     '--name=QuickShare_GUI',
     '--onefile',
     '--windowed',
-    '--add-data=server.py;.',
-    '--add-data=translations.py;.',
+    f'--add-data=server.py{separator}.',
+    f'--add-data=translations.py{separator}.',
     '--hidden-import=flask',
     '--hidden-import=qrcode',
     '--hidden-import=PIL',
     '--hidden-import=werkzeug',
+    '--hidden-import=jinja2',
     '--collect-all=flask',
     '--collect-all=qrcode',
+    '--collect-data=flask',
     '--noconsole',
     f'--distpath={current_dir / "dist"}',
     f'--workpath={current_dir / "build"}',

@@ -11,6 +11,9 @@ import qrcode
 from PIL import Image, ImageTk
 from io import BytesIO
 
+# Для запуска Flask сервера в потоке
+import importlib.util
+
 class ServerLauncher:
     def __init__(self, root):
         self.root = root
@@ -20,6 +23,8 @@ class ServerLauncher:
         
         # Переменные
         self.server_process = None
+        self.server_thread = None
+        self.flask_app = None
         self.is_running = False
         self.port = tk.StringVar(value="8000")
         self.upload_folder = tk.StringVar(value="uploads")
@@ -246,28 +251,54 @@ class ServerLauncher:
         self.qr_label.configure(image=photo, text="")
         self.qr_label.image = photo
     
+    def get_resource_path(self, relative_path):
+        """Получить абсолютный путь к ресурсу (работает для .exe и обычного запуска)"""
+        try:
+            # PyInstaller создаёт временную папку и сохраняет путь в _MEIPASS
+            base_path = sys._MEIPASS
+        except Exception:
+            base_path = Path(__file__).parent
+        
+        return os.path.join(base_path, relative_path)
+    
+    def run_flask_server(self, port, upload_folder):
+        """Запустить Flask сервер в отдельном потоке"""
+        try:
+            # Загрузить модуль server.py
+            server_path = self.get_resource_path("server.py")
+            
+            spec = importlib.util.spec_from_file_location("server", server_path)
+            server_module = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(server_module)
+            
+            # Установить переменные окружения
+            os.environ['UPLOAD_FOLDER'] = upload_folder
+            
+            # Запустить Flask приложение
+            self.flask_app = server_module.app
+            self.flask_app.run(host="0.0.0.0", port=port, debug=False, use_reloader=False)
+            
+        except Exception as e:
+            print(f"Ошибка при запуске сервера: {e}")
+    
     def start_server(self):
         if self.is_running:
             return
         
         try:
             port = int(self.port.get())
+            upload_folder = self.upload_folder.get()
             
             # Создать папку если не существует
-            os.makedirs(self.upload_folder.get(), exist_ok=True)
+            os.makedirs(upload_folder, exist_ok=True)
             
-            # Запустить сервер в отдельном процессе
-            server_script = Path(__file__).parent / "server.py"
-            
-            if not server_script.exists():
-                messagebox.showerror("Ошибка", "Файл server.py не найден!")
-                return
-            
-            # Запустить сервер
-            self.server_process = subprocess.Popen(
-                [sys.executable, str(server_script)],
-                cwd=Path(__file__).parent
+            # Запустить сервер в отдельном потоке
+            self.server_thread = threading.Thread(
+                target=self.run_flask_server,
+                args=(port, upload_folder),
+                daemon=True
             )
+            self.server_thread.start()
             
             self.is_running = True
             
@@ -294,11 +325,8 @@ class ServerLauncher:
         if not self.is_running:
             return
         
-        if self.server_process:
-            self.server_process.terminate()
-            self.server_process.wait()
-            self.server_process = None
-        
+        # Остановить Flask (сложно из потока, поэтому просто помечаем как неактивный)
+        # Flask сервер остановится при закрытии приложения (daemon thread)
         self.is_running = False
         
         # Обновить UI
