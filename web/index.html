@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="dark light">
+<title>QuickShare</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+<link rel="stylesheet" href="/assets/style.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <span class="brand-mark">⚡</span>
+    <div>
+      <h1>QuickShare</h1>
+      <p class="brand-sub" data-i18n="subtitle">Local network file transfer</p>
+    </div>
+  </div>
+  <div class="topbar-actions">
+    <div class="stat">
+      <span class="stat-value" id="statCount">0</span>
+      <span class="stat-label" data-i18n="files">Files</span>
+    </div>
+    <div class="stat">
+      <span class="stat-value" id="statSize">0 B</span>
+      <span class="stat-label" data-i18n="total">Total</span>
+    </div>
+    <button class="icon-btn" id="qrBtn" title="QR code">▦</button>
+    <button class="icon-btn" id="langBtn" title="Language">EN</button>
+    <button class="icon-btn" id="themeBtn" title="Theme">☾</button>
+  </div>
+</header>
+
+<main class="container">
+
+  <section class="dropzone" id="dropzone">
+    <div class="dropzone-inner">
+      <div class="dropzone-icon">↑</div>
+      <h2 data-i18n="dropTitle">Drop files here</h2>
+      <p data-i18n="dropDesc">or pick files and folders to share</p>
+      <div class="dropzone-buttons">
+        <label class="btn btn-primary">
+          <input type="file" id="fileInput" multiple hidden>
+          <span data-i18n="selectFiles">Select files</span>
+        </label>
+        <label class="btn btn-ghost">
+          <input type="file" id="folderInput" webkitdirectory multiple hidden>
+          <span data-i18n="selectFolder">Select folder</span>
+        </label>
+      </div>
+    </div>
+  </section>
+
+  <section class="toolbar">
+    <div class="search">
+      <span class="search-icon">⌕</span>
+      <input type="search" id="search" data-i18n-ph="searchPlaceholder" placeholder="Search files…">
+    </div>
+    <div class="sort">
+      <button class="chip is-active" data-sort="name" data-i18n="sortName">Name</button>
+      <button class="chip" data-sort="size" data-i18n="sortSize">Size</button>
+      <button class="chip" data-sort="date" data-i18n="sortDate">Date</button>
+    </div>
+  </section>
+
+  <section id="grid" class="grid"></section>
+
+  <div id="empty" class="empty hidden">
+    <div class="empty-icon">∅</div>
+    <h3 data-i18n="emptyTitle">No files yet</h3>
+    <p data-i18n="emptyDesc">Upload your first file to get started</p>
+  </div>
+
+</main>
+
+<div class="toast-stack" id="toasts"></div>
+
+<div class="upload-card hidden" id="uploadCard">
+  <div class="upload-head">
+    <span id="uploadLabel" data-i18n="uploading">Uploading…</span>
+    <span id="uploadPercent">0%</span>
+  </div>
+  <div class="bar"><div class="bar-fill" id="uploadBar"></div></div>
+</div>
+
+<div class="modal hidden" id="qrModal">
+  <div class="modal-card">
+    <h3 data-i18n="qrTitle">Scan to connect</h3>
+    <p class="modal-sub" data-i18n="qrDesc">Open this address on any device in your network</p>
+    <img id="qrImage" alt="QR code" width="240" height="240">
+    <code id="qrUrl"></code>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" id="qrCopy" data-i18n="copy">Copy address</button>
+      <button class="btn btn-primary" id="qrClose" data-i18n="close">Close</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal hidden" id="confirmModal">
+  <div class="modal-card">
+    <h3 id="confirmTitle" data-i18n="confirmTitle">Delete item?</h3>
+    <p class="modal-sub" id="confirmText"></p>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" id="confirmCancel" data-i18n="cancel">Cancel</button>
+      <button class="btn btn-danger" id="confirmOk" data-i18n="delete">Delete</button>
+    </div>
+  </div>
+</div>
+
+<script src="/assets/app.js"></script>
+</body>
+</html>
