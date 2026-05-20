@@ -97,20 +97,20 @@ function formatDate(unix) {
 
 // Pick an icon glyph + accent colour from a file's extension.
 const ICONS = [
-  { ext: ["png","jpg","jpeg","gif","webp","svg","bmp"], glyph: "IMG", color: "#ff8a5c" },
-  { ext: ["mp4","mkv","mov","avi","webm"],              glyph: "VID", color: "#ff5c72" },
-  { ext: ["mp3","wav","flac","ogg","m4a"],              glyph: "AUD", color: "#c77dff" },
-  { ext: ["zip","rar","7z","tar","gz"],                 glyph: "ZIP", color: "#ffc14d" },
-  { ext: ["pdf"],                                       glyph: "PDF", color: "#ff5c72" },
-  { ext: ["doc","docx","txt","md","rtf"],               glyph: "DOC", color: "#5c9dff" },
-  { ext: ["xls","xlsx","csv"],                          glyph: "XLS", color: "#38e6c5" },
-  { ext: ["js","ts","go","py","html","css","json","c","cpp"], glyph: "<>", color: "#7c83ff" },
-  { ext: ["exe","msi","apk","dmg"],                     glyph: "APP", color: "#97a1c4" },
+  { ext: ["png","jpg","jpeg","gif","webp","svg","bmp"], glyph: "IMG", color: "#c9824f" },
+  { ext: ["mp4","mkv","mov","avi","webm"],              glyph: "VID", color: "#bd5f6b" },
+  { ext: ["mp3","wav","flac","ogg","m4a"],              glyph: "AUD", color: "#8a73b4" },
+  { ext: ["zip","rar","7z","tar","gz"],                 glyph: "ZIP", color: "#b6953f" },
+  { ext: ["pdf"],                                       glyph: "PDF", color: "#bd5f6b" },
+  { ext: ["doc","docx","txt","md","rtf"],               glyph: "DOC", color: "#527fb4" },
+  { ext: ["xls","xlsx","csv"],                          glyph: "XLS", color: "#4f9b78" },
+  { ext: ["js","ts","go","py","html","css","json","c","cpp"], glyph: "<>", color: "#6168a8" },
+  { ext: ["exe","msi","apk","dmg"],                     glyph: "APP", color: "#7c8089" },
 ];
 function iconFor(entry) {
-  if (entry.isDir) return { glyph: "DIR", color: "#ffc14d" };
+  if (entry.isDir) return { glyph: "DIR", color: "#b6953f" };
   const ext = entry.name.split(".").pop().toLowerCase();
-  return ICONS.find(i => i.ext.includes(ext)) || { glyph: "FILE", color: "#5b62e8" };
+  return ICONS.find(i => i.ext.includes(ext)) || { glyph: "FILE", color: "#5d6470" };
 }
 
 /* ── Rendering ─────────────────────────────────────────── */
